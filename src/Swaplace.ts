@@ -28,7 +28,7 @@ ponder.on("Swaplace:SwapCanceled", async ({ event, context }) => {
       swapId,
       owner,
       blockNumber: event.block.number,
-
+      blockTimestamp: event.block.timestamp,
       transactionHash: event.transaction.hash,
     },
   });

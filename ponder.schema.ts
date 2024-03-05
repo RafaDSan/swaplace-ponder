@@ -15,6 +15,7 @@ export default createSchema((p) => ({
     swapId: p.bigint(),
     owner: p.hex(),
     blockNumber: p.bigint(),
+    blockTimestamp: p.bigint(),
     transactionHash: p.hex(),
   }),
   SwapCreated: p.createTable({
