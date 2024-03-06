@@ -4,8 +4,7 @@ export default createSchema((p) => ({
   SwapAccepted: p.createTable({
     id: p.hex(),
     swapId: p.bigint(),
-    owner: p.hex(),
-    allowed: p.hex(),
+    acceptee: p.hex(),
     blockNumber: p.bigint(),
     blockTimestamp: p.bigint(),
     transactionHash: p.hex(),
@@ -22,9 +21,9 @@ export default createSchema((p) => ({
     id: p.hex(),
     swapId: p.bigint(),
     owner: p.hex(),
-    allowed: p.hex(),
     blockNumber: p.bigint(),
     blockTimestamp: p.bigint(),
     transactionHash: p.hex(),
+    expiry: p.bigint(),
   }),
 }));

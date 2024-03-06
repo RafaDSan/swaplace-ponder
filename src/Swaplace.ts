@@ -2,14 +2,13 @@ import { ponder } from "@/generated";
 
 ponder.on("Swaplace:SwapAccepted", async ({ event, context }) => {
   const { SwapAccepted } = context.db;
-  const { swapId, owner, allowed } = event.args;
-
+  const { swapId, acceptee } = event.args;
+  
   await SwapAccepted.create({
-    id: `0x${swapId}`,
+    id: `0x${swapId}` || null,
     data: {
       swapId,
-      owner,
-      allowed,
+      acceptee,
       blockNumber: event.block.number,
       blockTimestamp: event.block.timestamp,
       transactionHash: event.transaction.hash,
@@ -23,7 +22,7 @@ ponder.on("Swaplace:SwapCanceled", async ({ event, context }) => {
   const { swapId, owner } = event.args;
 
   await SwapCanceled.create({
-    id: `0x${swapId}`,
+    id: `0x${swapId}` || null,
     data: {
       swapId,
       owner,
@@ -37,18 +36,18 @@ ponder.on("Swaplace:SwapCanceled", async ({ event, context }) => {
 
 ponder.on("Swaplace:SwapCreated", async ({ event, context }) => {
   const { SwapCreated } = context.db;
-  const { swapId, owner, allowed } = event.args;
+  const { swapId, owner, expiry } = event.args;
 
   await SwapCreated.create({
-    id: `0x${swapId}`,
+    id: `0x${swapId}` || null,
     data: {
       swapId,
       owner,
-      allowed,
+      expiry,
       blockNumber: event.block.number,
       blockTimestamp: event.block.timestamp,
       transactionHash: event.transaction.hash,
     },
   });
-  console.log("Events created", event.args);
+  console.log(event.args);
 });
