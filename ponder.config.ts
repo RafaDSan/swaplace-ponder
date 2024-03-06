@@ -15,7 +15,7 @@ export default createConfig({
       abi: SwaplaceAbi,
       address: "0xD8E3580C1b6f117c5b35DdD01dd9e50d9487501D",
       network: "sepolia",
-      startBlock: 5206960,
+      startBlock: 4926698,
     },
   },
 });
