@@ -1,38 +1,5 @@
 import { ponder } from "@/generated";
 
-// ponder.on("Swaplace:SwapAccepted", async ({ event, context }) => { //mudar para updated
-//   const { Database } = context.db;
-//   const { swapId, acceptee } = event.args;
-
-//   await Database.create({
-//     id: `0x${swapId}`,
-//     data: {
-//       swapId,
-//       acceptee,
-//       blockTimestamp: event.block.timestamp,
-//       transactionHash: event.transaction.hash,  
-//       status: "ACCEPTED",
-//     },
-    
-    
-//   });
-//   console.log(event.args);
-// });
-
-ponder.on("Swaplace:SwapCanceled", async ({ event, context }) => { //mudar para updated
-  const { Database } = context.db;
-  const { swapId } = event.args;
-
-  await Database.update({
-    id: `0x${swapId}`,
-    data: {
-      blockTimestamp: event.block.timestamp,
-      transactionHash: event.transaction.hash,
-      status: "CANCELED",
-    },
-  });
-});
-
 ponder.on("Swaplace:SwapCreated", async ({ event, context }) => {
   const { client } = context;
   const { Swaplace } = context.contracts;
@@ -46,19 +13,42 @@ ponder.on("Swaplace:SwapCreated", async ({ event, context }) => {
     args: [event.args.swapId],
   });
 
+  interface Asset {
+    addr: string;
+    amountOrId: string;
+  }
+
+  let biding = contractResponse.biding.map((config) => {
+    let asset: Asset = {
+      addr: config.addr,
+      amountOrId: config.amountOrId.toString(),
+    };
+    return asset;
+  });
+
+  let asking = contractResponse.biding.map((config) => {
+    let asset: Asset = {
+      addr: config.addr,
+      amountOrId: config.amountOrId.toString(),
+    };
+    return JSON.stringify(asset);
+  });
+
+  let strinfiedBid = JSON.stringify(biding);
+  let strinfiedAsk = JSON.stringify(asking);
+
   await Database.create({
     id: `0x${swapId}`,
     data: {
-      swapId,
-      owner,
-      acceptee: contractResponse.allowed,
-      expiry,
-      bid: JSON.stringify(contractResponse.biding),
-      ask: JSON.stringify(contractResponse.asking),
+      swapId: swapId,
+      status: "CREATED",
+      owner: owner,
+      allowed: contractResponse.allowed,
+      expiry: expiry,
+      bid: strinfiedBid,
+      ask: strinfiedAsk,
       blockTimestamp: event.block.timestamp,
       transactionHash: event.transaction.hash,
-      status: "CREATED",
     },
-
   });
 });

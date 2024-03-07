@@ -5,7 +5,7 @@ export default createSchema((p) => ({
   Database: p.createTable({
     id: p.hex(),
     status: p.enum("Status"),
-    acceptee: p.hex(),
+    allowed: p.hex(),
     owner: p.hex(),
     expiry: p.bigint(),
     bid: p.string(),
@@ -14,17 +14,4 @@ export default createSchema((p) => ({
     blockTimestamp: p.bigint(),
     transactionHash: p.hex(),
   }),
-  // Status: p.createEnum(["CREATED", "ACCEPTED", "CANCELED"]),
-  // Swaps: p.createTable({
-  //   id: p.hex(),
-  //   owner: p.hex(),
-  //   swapId: p.bigint(),
-  //   acceptee: p.hex(), 
-  //   bid: p.bigint(),
-  //   ask: p.bigint(),
-  //   expiry: p.bigint(),
-  //   status: p.enum("Status"),
-  //   blockTimestamp: p.bigint(),
-  //   transactionHash: p.hex(),
-  // }),
 }));

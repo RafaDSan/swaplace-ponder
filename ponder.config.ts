@@ -1,6 +1,5 @@
 import { createConfig } from "@ponder/core";
 import { http } from "viem";
-import { Alchemy } from "alchemy-sdk";
 
 import { SwaplaceAbi } from "./abis/SwaplaceAbi";
 
@@ -8,7 +7,7 @@ export default createConfig({
   networks: {
     sepolia: {
       chainId: 11155111,
-      transport: http(process.env.PONDER_RPC_URL_11155111),
+      transport: http(process.env.ALCHEMY_RPC_URL),
     },
   },
   contracts: {
