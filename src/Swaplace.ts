@@ -1,4 +1,5 @@
 import { ponder } from "@/generated";
+//import { ethers } from "ethers";
 
 // ponder.on("Swaplace:SwapAccepted", async ({ event, context }) => { //mudar para updated
 //   const { Database } = context.db;
@@ -45,7 +46,15 @@ ponder.on("Swaplace:SwapCreated", async ({ event, context }) => {
     functionName: "getSwap",
     args: [event.args.swapId],
   });
+  
 
+  // const provider = new ethers.providers.JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/D4cZZW64N8gn71Xp8Vk5lr6CNlLMCdqr");
+  // console.log("teste");
+  // const network = (await provider.getNetwork()).chainId;
+  // console.log("providerRPCLOG:", network);
+  // const contract = new ethers.Contract(Swaplace.address, Swaplace.abi, provider);
+  // const contractResponse = await contract.getSwap(event.args.swapId);
+  
   await Database.create({
     id: `0x${swapId}`,
     data: {
