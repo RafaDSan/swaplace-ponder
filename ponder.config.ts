@@ -1,5 +1,6 @@
 import { createConfig } from "@ponder/core";
 import { http } from "viem";
+import { Alchemy } from "alchemy-sdk";
 
 import { SwaplaceAbi } from "./abis/SwaplaceAbi";
 

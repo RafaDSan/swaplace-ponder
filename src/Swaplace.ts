@@ -1,53 +1,64 @@
 import { ponder } from "@/generated";
 
-ponder.on("Swaplace:SwapAccepted", async ({ event, context }) => {
-  const { SwapAccepted } = context.db;
-  const { swapId, acceptee } = event.args;
-  
-  await SwapAccepted.create({
-    id: `0x${swapId}` || null,
+// ponder.on("Swaplace:SwapAccepted", async ({ event, context }) => { //mudar para updated
+//   const { Database } = context.db;
+//   const { swapId, acceptee } = event.args;
+
+//   await Database.create({
+//     id: `0x${swapId}`,
+//     data: {
+//       swapId,
+//       acceptee,
+//       blockTimestamp: event.block.timestamp,
+//       transactionHash: event.transaction.hash,  
+//       status: "ACCEPTED",
+//     },
+    
+    
+//   });
+//   console.log(event.args);
+// });
+
+ponder.on("Swaplace:SwapCanceled", async ({ event, context }) => { //mudar para updated
+  const { Database } = context.db;
+  const { swapId } = event.args;
+
+  await Database.update({
+    id: `0x${swapId}`,
     data: {
-      swapId,
-      acceptee,
-      blockNumber: event.block.number,
       blockTimestamp: event.block.timestamp,
       transactionHash: event.transaction.hash,
+      status: "CANCELED",
     },
   });
-  console.log(event.args);
-});
-
-ponder.on("Swaplace:SwapCanceled", async ({ event, context }) => {
-  const { SwapCanceled } = context.db;
-  const { swapId, owner } = event.args;
-
-  await SwapCanceled.create({
-    id: `0x${swapId}` || null,
-    data: {
-      swapId,
-      owner,
-      blockNumber: event.block.number,
-      blockTimestamp: event.block.timestamp,
-      transactionHash: event.transaction.hash,
-    },
-  });
-  console.log(event.args);
 });
 
 ponder.on("Swaplace:SwapCreated", async ({ event, context }) => {
-  const { SwapCreated } = context.db;
+  const { client } = context;
+  const { Swaplace } = context.contracts;
+  const { Database } = context.db;
   const { swapId, owner, expiry } = event.args;
 
-  await SwapCreated.create({
-    id: `0x${swapId}` || null,
+  const contractResponse = await client.readContract({
+    abi: Swaplace.abi,
+    address: Swaplace.address,
+    functionName: "getSwap",
+    args: [event.args.swapId],
+  });
+
+  await Database.create({
+    id: `0x${swapId}`,
     data: {
       swapId,
       owner,
+      acceptee: contractResponse.allowed,
       expiry,
-      blockNumber: event.block.number,
+      bid: JSON.stringify(contractResponse.biding),
+      ask: JSON.stringify(contractResponse.asking),
       blockTimestamp: event.block.timestamp,
       transactionHash: event.transaction.hash,
+      status: "CREATED",
     },
+
   });
-  console.log(event.args);
 });
